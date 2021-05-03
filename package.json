@@ -1,0 +1,23 @@
+{
+  "name": "nodejs-auth-pg",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "node ./dist/server.js",
+    "dev-server": "ts-node-dev ./src/server.ts",
+    "dev-client": "cd client && npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "ts-node-dev": "^1.1.6"
+  }
+}
