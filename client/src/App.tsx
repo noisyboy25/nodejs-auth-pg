@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Form from './components/Form';
+import SecuredTest from './components/SecuredTest';
 
 function App() {
   const [mode, setMode] = useState('register');
@@ -77,6 +78,7 @@ function App() {
           <div>Login: {login}</div>
           <div>Password: {password}</div>
         </div>
+        <SecuredTest />
       </main>
     </div>
   );

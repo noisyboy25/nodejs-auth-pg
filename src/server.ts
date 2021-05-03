@@ -42,4 +42,12 @@ app.post('/api/login', (req, res) => {
   res.send({ message: 'Successfully logged in' });
 });
 
+app.get('/api/secured', (req, res) => {
+  console.log(req.cookies);
+
+  const auth = jwt.verify(req.cookies.JWT, 'secret');
+  console.log(auth);
+  res.send({ message: 'Secured' });
+});
+
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
