@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
 import Form from './components/Form';
 import SecuredTest from './components/SecuredTest';
 
 function App() {
-  const [mode, setMode] = useState('register');
+  const [loggedIn, setLoggedIn] = useState(false);
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
@@ -16,6 +17,13 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(loginData),
     });
+
+    if (res.status === 200) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+
     const data = await res.json();
     console.log(data);
   };
@@ -33,54 +41,72 @@ function App() {
     console.log(data);
   };
 
+  const handleLogout = async () => {
+    const res = await fetch('/api/logout');
+    console.log(res);
+    setLoggedIn(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header"></header>
-      <main>
-        <div>
+    <BrowserRouter>
+      <div className="App">
+        <header className="App-header">
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              {!loggedIn ? (
+                <>
+                  <li>
+                    <Link to="/register">Register</Link>
+                  </li>
+                  <li>
+                    <Link to="/login">Login</Link>
+                  </li>
+                </>
+              ) : (
+                <button onClick={() => handleLogout()}>Logout</button>
+              )}
+            </ul>
+          </nav>
+        </header>
+        <main>
           <div>
-            <input
-              id="register-mode"
-              type="radio"
-              value="register"
-              checked={mode === 'register'}
-              onChange={(event) => setMode(event.target.value)}
-            />
-            <label htmlFor="register-mode">Register</label>
-          </div>
-          <div>
-            <input
-              id="login-mode"
-              type="radio"
-              value="login"
-              checked={mode === 'login'}
-              onChange={(event) => setMode(event.target.value)}
-            />
-            <label htmlFor="login-mode">Login</label>
-          </div>
-        </div>
+            <Switch>
+              <Route path="/register">
+                <h3>Create a new account</h3>
+                <Form
+                  login={login}
+                  setLogin={setLogin}
+                  password={password}
+                  setPassword={setPassword}
+                  handleSubmit={handleRegister}
+                />
+              </Route>
+              <Route path="/login">
+                {!loggedIn && (
+                  <div>
+                    <h3>Login</h3>
+                    <Form
+                      login={login}
+                      setLogin={setLogin}
+                      password={password}
+                      setPassword={setPassword}
+                      handleSubmit={handleLogin}
+                    />
+                  </div>
+                )}
+              </Route>
 
-        {mode === 'register' ? (
-          <Form
-            setLogin={setLogin}
-            setPassword={setPassword}
-            handleSubmit={handleRegister}
-          />
-        ) : (
-          <Form
-            setLogin={setLogin}
-            setPassword={setPassword}
-            handleSubmit={handleLogin}
-          />
-        )}
-
-        <div>
-          <div>Login: {login}</div>
-          <div>Password: {password}</div>
-        </div>
-        <SecuredTest />
-      </main>
-    </div>
+              <Route path="/">
+                <SecuredTest />
+              </Route>
+            </Switch>
+          </div>
+        </main>
+      </div>
+    </BrowserRouter>
   );
 }
 

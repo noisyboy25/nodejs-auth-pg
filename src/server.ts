@@ -31,8 +31,9 @@ app.post('/api/login', (req, res) => {
 
   const user: any = users.find((u) => u.login === data.login);
 
-  if (user.password !== data.password) {
-    res.status(401).send('Incorrect login or password');
+  if (!user || user.password !== data.password) {
+    res.clearCookie('JWT');
+    return res.status(401).send('Incorrect login or password');
   }
 
   const token = jwt.sign({ login: data.login }, 'secret');
@@ -40,6 +41,11 @@ app.post('/api/login', (req, res) => {
 
   res.cookie('JWT', token, { httpOnly: true });
   res.send({ message: 'Successfully logged in' });
+});
+
+app.get('/api/logout', (req, res) => {
+  res.clearCookie('JWT');
+  return res.send('Successfully logged out');
 });
 
 app.get('/api/secured', (req, res) => {

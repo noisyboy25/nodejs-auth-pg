@@ -1,9 +1,13 @@
 const Form = ({
+  login,
   setLogin,
+  password,
   setPassword,
   handleSubmit,
 }: {
+  login: string;
   setLogin: Function;
+  password: string;
   setPassword: Function;
   handleSubmit: Function;
 }) => {
@@ -19,6 +23,7 @@ const Form = ({
           type="text"
           name="login"
           id="login"
+          value={login}
           onChange={(e) => {
             setLogin(e.target.value);
           }}
@@ -30,12 +35,15 @@ const Form = ({
           type="password"
           name="password"
           id="password"
+          value={password}
           onChange={(e) => {
             setPassword(e.target.value);
           }}
         />
         <label htmlFor="password"> password</label>
-        <input type="submit" />
+        <div>
+          <input type="submit" />
+        </div>
       </div>
     </form>
   );

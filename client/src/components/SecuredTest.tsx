@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const SecuredTest = () => {
   const [securedData, setSecuredData]: any = useState({});
-  const handleTest = async () => {
-    setSecuredData({});
-    const res = await fetch('/api/secured');
-    const data = await res.json();
-    setSecuredData(data);
-  };
-  return (
-    <div>
-      {securedData.message && <p>{securedData.message}</p>}
-      <button onClick={handleTest}>test</button>
-    </div>
-  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setSecuredData({});
+      const res = await fetch('/api/secured');
+      const data = await res.json();
+      setSecuredData(data);
+    };
+
+    fetchData();
+  }, []);
+
+  return <div>{securedData.message && <p>{securedData.message}</p>}</div>;
 };
 
 export default SecuredTest;
